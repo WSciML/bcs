@@ -1,25 +1,37 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import Image, { type StaticImageData } from "next/image";
+
+import danImg from "../static/headshots/dan.jpeg";
+import davidImg from "../static/headshots/david_bortz.jpeg";
+import jackImg from "../static/headshots/jack.jpeg";
+import vanjaImg from "../static/headshots/vanja.jpeg";
 
 const ACCENT = "oklch(0.78 0.13 200)";
 const ACCENT_BRIGHT = "oklch(0.82 0.12 200)";
 
 type Cap = { n: string; title: string; blurb: string };
-type Person = { name: string; role: string; email: string; bio: string };
+type Person = {
+  name: string;
+  role: string;
+  email: string;
+  bio: string;
+  img: StaticImageData;
+};
 
 const caps: Cap[] = [
   {
     n: "01",
     title: "Equation learning from data",
     blurb:
-      "Discover the governing equations of a system directly from measurements — no assumed model form required.",
+      "Discover the governing equations of a system directly from measurements.",
   },
   {
     n: "02",
     title: "Ultra-fast parameter estimation",
     blurb:
-      "Calibrate complex models orders of magnitude faster, turning overnight fits into seconds.",
+      "Calibrate complex models in seconds.",
   },
   {
     n: "03",
@@ -37,28 +49,38 @@ const caps: Cap[] = [
     n: "05",
     title: "Industrial-scale model selection",
     blurb:
-      "Search across more than 10⁹ candidate models simultaneously — in seconds, not weeks.",
+      "Search across more than 10⁹ candidate models simultaneously in seconds.",
   },
 ];
 
 const team: Person[] = [
   {
     name: "Vanja Dukic",
+    img: vanjaImg,
     role: "Co-founder · Statistics & Applied Math",
     email: "vanja.dukic@gmail.com",
     bio: "Bayesian modeling, statistical inference, and computational methods for complex real-world systems.",
   },
   {
     name: "David Bortz",
+    img: davidImg,
     role: "Co-founder · Applied Mathematics",
     email: "david.bortz@colorado.edu",
     bio: "Data-driven modeling, equation learning, and mathematical biology at industrial scale.",
   },
   {
     name: "Dan Messenger",
+    img: danImg,
     role: "Co-founder · Scientific Machine Learning",
     email: "daniel.messenger@colorado.edu",
     bio: "Data-driven modeling and the analysis and simulation of multiscale phenomena at the intersection of physical applied math and scientific ML.",
+  },
+  {
+    name: "Jack Krebsbach",
+    img: jackImg,
+    role: "Researcher · Scientific Machine Learning",
+    email: "jack.krebsbach@colorado.edu",
+    bio: "Data-driven modeling, parameter estimation of dynamical systems",
   },
 ];
 
@@ -70,6 +92,8 @@ const industries: string[] = [
   "Finance & risk",
   "Research labs & academia",
 ];
+
+type Status = "idle" | "sending" | "sent" | "error";
 
 const mono: CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 const grotesk: CSSProperties = { fontFamily: "'Space Grotesk', sans-serif" };
@@ -86,7 +110,14 @@ function scrollToId(id: string) {
 
 export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [copied, setCopied] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
   const rootRef = useRef<HTMLElement>(null);
 
   // Scroll-reveal: reveal .reveal elements as they enter the viewport.
@@ -130,16 +161,32 @@ export default function Home() {
     };
   }, [dialogOpen]);
 
-  const openDialog = () => setDialogOpen(true);
+  const openDialog = () => {
+    setStatus("idle");
+    setError("");
+    setDialogOpen(true);
+  };
 
-  const copyEmail = async (email: string) => {
-    try {
-      await navigator.clipboard.writeText(email);
-      setCopied(email);
-      window.setTimeout(() => setCopied((c) => (c === email ? null : c)), 1600);
-    } catch {
-      // Clipboard unavailable — the mailto link is still available.
+  const set = (k: keyof typeof form) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    if (res.ok) {
+      setStatus("sent");
+      setForm({ name: "", email: "", company: "", message: "" });
+      return;
     }
+    const data = await res.json().catch(() => ({}));
+    setError(data.error ?? "Could not send. Try again in a moment.");
+    setStatus("error");
   };
 
   return (
@@ -474,8 +521,7 @@ export default function Home() {
             }}
           >
             <div style={{ fontSize: 15, lineHeight: 1.6, color: "#6d7885" }}>
-              Every engagement is a bespoke mathematical model — not an
-              off-the-shelf tool.
+              Every engagement is a bespoke mathematical model
             </div>
           </div>
         </div>
@@ -538,17 +584,17 @@ export default function Home() {
                   height: 64,
                   flexShrink: 0,
                   borderRadius: 5,
-                  background:
-                    "repeating-linear-gradient(135deg,#1a2028,#1a2028 6px,#141a20 6px,#141a20 12px)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  ...mono,
-                  fontSize: 10,
-                  color: "#5a6572",
+                  overflow: "hidden",
+                  background: "#141a20",
                 }}
               >
-                headshot
+                <Image
+                  src={p.img}
+                  alt={p.name}
+                  width={64}
+                  height={64}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               </div>
               <div>
                 <div style={{ ...grotesk, fontWeight: 600, fontSize: 19 }}>
@@ -758,58 +804,90 @@ export default function Home() {
               </button>
             </div>
 
-            <p
-              style={{
-                fontSize: 14,
-                lineHeight: 1.6,
-                color: "#9aa5b1",
-                margin: "6px 0 22px",
-              }}
-            >
-              Reach out to any of us directly. Tell us what you&apos;re trying to
-              predict, estimate, or discover — we&apos;ll tell you how we&apos;d
-              approach it.
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {team.map((p) => (
-                <div key={p.email} className="contact-row">
-                  <a
-                    href={`mailto:${p.email}`}
-                    style={{ display: "block", minWidth: 0 }}
-                  >
-                    <div
-                      style={{
-                        ...grotesk,
-                        fontWeight: 600,
-                        fontSize: 15,
-                        color: "#e7ecf2",
-                      }}
-                    >
-                      {p.name}
-                    </div>
-                    <div
-                      style={{
-                        ...mono,
-                        fontSize: 12,
-                        color: "#9aa5b1",
-                        marginTop: 3,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {p.email}
-                    </div>
-                  </a>
-                  <button
-                    className={`copy-btn${copied === p.email ? " copied" : ""}`}
-                    onClick={() => copyEmail(p.email)}
-                  >
-                    {copied === p.email ? "Copied ✓" : "Copy"}
-                  </button>
+            {status === "sent" ? (
+              <div className="form-sent">
+                <div
+                  style={{
+                    ...grotesk,
+                    fontWeight: 600,
+                    fontSize: 17,
+                    marginBottom: 6,
+                  }}
+                >
+                  Message sent
                 </div>
-              ))}
-            </div>
+                <div style={{ fontSize: 14, color: "#9aa5b1", lineHeight: 1.6 }}>
+                  Thanks — we&apos;ll get back to you shortly.
+                </div>
+              </div>
+            ) : (
+              <>
+                <p
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.6,
+                    color: "#9aa5b1",
+                    margin: "6px 0 22px",
+                  }}
+                >
+                  Tell us what you&apos;re trying to predict, estimate, or
+                  discover — we&apos;ll tell you how we&apos;d approach it.
+                </p>
+
+                <form onSubmit={submit} className="contact-form">
+                  <label className="field">
+                    <span>Name</span>
+                    <input
+                      required
+                      value={form.name}
+                      onChange={set("name")}
+                      autoComplete="name"
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Email</span>
+                    <input
+                      required
+                      type="email"
+                      value={form.email}
+                      onChange={set("email")}
+                      autoComplete="email"
+                    />
+                  </label>
+                  <label className="field">
+                    <span>
+                      Company <em>optional</em>
+                    </span>
+                    <input
+                      value={form.company}
+                      onChange={set("company")}
+                      autoComplete="organization"
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Message</span>
+                    <textarea
+                      required
+                      rows={5}
+                      value={form.message}
+                      onChange={set("message")}
+                    />
+                  </label>
+
+                  {status === "error" && (
+                    <div className="form-error">{error}</div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary submit-btn"
+                    disabled={status === "sending"}
+                  >
+                    {status === "sending" ? "Sending…" : "Send message"}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}
