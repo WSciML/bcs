@@ -35,7 +35,6 @@ a {
   transition:
     opacity 0.7s var(--ease-out),
     transform 0.7s var(--ease-out);
-  will-change: opacity, transform;
 }
 .reveal.in-view {
   opacity: 1;
@@ -65,12 +64,6 @@ a {
   transform-origin: left;
   transition: transform 0.3s var(--ease-out);
 }
-.nav-link:hover {
-  color: #e7ecf2;
-}
-.nav-link:hover::after {
-  transform: scaleX(1);
-}
 
 /* ---------- buttons ---------- */
 .btn {
@@ -84,22 +77,12 @@ a {
     background 0.25s ease,
     border-color 0.25s ease;
 }
-.btn:hover {
-  transform: translateY(-2px);
-}
 .btn:active {
   transform: translateY(0);
 }
 .btn:focus-visible {
   outline: 2px solid var(--accent-bright);
   outline-offset: 3px;
-}
-.btn-primary:hover {
-  box-shadow: 0 10px 32px -8px oklch(0.78 0.13 200 / 0.55);
-}
-.btn-secondary:hover {
-  border-color: oklch(0.82 0.12 200 / 0.6);
-  background: oklch(0.78 0.13 200 / 0.07);
 }
 
 /* ---------- brand mark ---------- */
@@ -109,40 +92,22 @@ a {
 .brand .brand-mark {
   transition: box-shadow 0.3s ease, transform 0.4s var(--ease-out);
 }
-.brand:hover .brand-mark {
-  transform: rotate(-6deg) scale(1.06);
-  box-shadow: 0 0 18px -2px oklch(0.78 0.13 200 / 0.6);
-}
 
 /* ---------- capability cards ---------- */
 .cap-card {
   cursor: default;
   transition: background 0.3s ease, transform 0.3s var(--ease-out);
 }
-.cap-card:hover {
-  background: #11161d !important;
-  transform: translateY(-3px);
-}
 .cap-card .cap-num {
   transition: letter-spacing 0.3s ease, color 0.3s ease;
-}
-.cap-card:hover .cap-num {
-  letter-spacing: 0.18em;
-  color: var(--accent-bright);
 }
 
 /* ---------- metric cells ---------- */
 .metric {
   transition: background 0.3s ease;
 }
-.metric:hover {
-  background: rgba(255, 255, 255, 0.025);
-}
 .metric .metric-big {
   transition: transform 0.3s var(--ease-out);
-}
-.metric:hover .metric-big {
-  transform: translateY(-2px);
 }
 
 /* ---------- team cards ---------- */
@@ -152,16 +117,8 @@ a {
     border-color 0.3s ease,
     box-shadow 0.3s ease;
 }
-.team-card:hover {
-  transform: translateY(-4px);
-  border-color: oklch(0.78 0.13 200 / 0.35) !important;
-  box-shadow: 0 14px 44px -14px rgba(0, 0, 0, 0.65);
-}
 .team-card .headshot img {
   transition: transform 0.4s var(--ease-out);
-}
-.team-card:hover .headshot img {
-  transform: scale(1.06);
 }
 
 /* ---------- industry pills ---------- */
@@ -172,12 +129,6 @@ a {
     border-color 0.3s ease,
     color 0.3s ease,
     transform 0.3s var(--ease-out);
-}
-.pill:hover {
-  background: oklch(0.78 0.13 200 / 0.12);
-  border-color: oklch(0.78 0.13 200 / 0.5) !important;
-  color: #ffffff;
-  transform: translateY(-2px);
 }
 
 /* ---------- CTA email links ---------- */
@@ -196,9 +147,6 @@ a {
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.3s var(--ease-out);
-}
-.email-link:hover::after {
-  transform: scaleX(1);
 }
 
 /* ---------- animated ridgeline ---------- */
@@ -222,11 +170,17 @@ a {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(4, 8, 11, 0.72);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  background: rgba(4, 8, 11, 0.86);
   animation: fadeIn 0.25s ease forwards;
 }
+@media (hover: hover) and (pointer: fine) {
+  .dialog-backdrop {
+    background: rgba(4, 8, 11, 0.72);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
+
 .dialog-card {
   width: 100%;
   max-width: 460px;
@@ -258,11 +212,6 @@ a {
   align-items: center;
   justify-content: center;
   transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-.dialog-close:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #e7ecf2;
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .contact-form {
@@ -331,6 +280,89 @@ a {
 }
 .form-sent {
   padding: 22px 0 6px;
+}
+
+/* ---------- hover states ---------- */
+/* Gated behind a real pointing device. iOS Safari fires :hover on tap and then
+   leaves it stuck until you tap elsewhere, so on a phone these ran as a repaint
+   storm on every touch — the box-shadow blurs and the letter-spacing reflow
+   below are the expensive ones. Desktop is unchanged. */
+@media (hover: hover) and (pointer: fine) {
+  .nav-link:hover {
+    color: #e7ecf2;
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 10px 32px -8px oklch(0.78 0.13 200 / 0.55);
+  }
+  .btn-secondary:hover {
+    border-color: oklch(0.82 0.12 200 / 0.6);
+    background: oklch(0.78 0.13 200 / 0.07);
+  }
+
+  .brand:hover .brand-mark {
+    transform: rotate(-6deg) scale(1.06);
+    box-shadow: 0 0 18px -2px oklch(0.78 0.13 200 / 0.6);
+  }
+
+  .cap-card:hover {
+    background: #11161d !important;
+    transform: translateY(-3px);
+  }
+  .cap-card:hover .cap-num {
+    letter-spacing: 0.18em;
+    color: var(--accent-bright);
+  }
+
+  .metric:hover {
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .metric:hover .metric-big {
+    transform: translateY(-2px);
+  }
+
+  .team-card:hover {
+    transform: translateY(-4px);
+    border-color: oklch(0.78 0.13 200 / 0.35) !important;
+    box-shadow: 0 14px 44px -14px rgba(0, 0, 0, 0.65);
+  }
+  .team-card:hover .headshot img {
+    transform: scale(1.06);
+  }
+
+  .pill:hover {
+    background: oklch(0.78 0.13 200 / 0.12);
+    border-color: oklch(0.78 0.13 200 / 0.5) !important;
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  .email-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .dialog-close:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e7ecf2;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Touch devices get an instant press state instead of a hover transition. */
+@media (hover: none) {
+  .cap-card, .metric, .pill, .team-card, .nav-link, .brand .brand-mark,
+  .team-card .headshot img, .btn {
+    transition: none;
+  }
+  .btn:active {
+    opacity: 0.85;
+  }
 }
 
 /* ---------- responsive / mobile ---------- */
