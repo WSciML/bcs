@@ -42,14 +42,15 @@ Settings → Environment Variables, for all three environments.
 ## Structure
 
 ```
-nextjs-bcs/
+bcs/
 ├── app/
 │   ├── api/contact/
-│   │   └── route.ts    # contact form handler -> Resend
-│   ├── globals.css     # resets, body background, link styles
-│   ├── layout.tsx      # <html>, metadata, Google Fonts (Space Grotesk, JetBrains Mono, Public Sans)
-│   └── page.tsx        # the full landing page
-├── static/headshots/   # founder photos, imported by app/page.tsx
+│   │   └── route.ts        # contact form handler -> Resend
+│   ├── components/
+│   │   └── Vortex.tsx      # WebGL2 hero: self-similar vortex streamlines
+│   ├── globals.css         # all page styles
+│   ├── layout.tsx          # <html>, metadata, fonts (Mona Sans, Libertinus Math)
+│   └── page.tsx            # the landing page
 ├── next.config.mjs
 ├── tsconfig.json
 └── package.json
@@ -57,13 +58,11 @@ nextjs-bcs/
 
 ## Notes
 
-- Styling is inline (matching the original HTML design 1:1). If you prefer Tailwind
-  or CSS Modules, the section markup maps cleanly onto either.
-- The page centers a fixed 1120px column, as in the design. To make it fully fluid/
-  responsive, replace the fixed `maxWidth`/paddings with responsive units and add
-  breakpoints for the nav, metric strip, capabilities, and team grids.
-- Content (capabilities, team, industries) lives in typed arrays at the top of
-  `app/page.tsx` — edit there.
-- Headshots are imported directly in `app/page.tsx` so Next fingerprints and
-  optimizes them; they are not served from `public/`.
-# bcs
+- Content (capabilities, industries, statement) lives in arrays at the top of
+  `app/page.tsx`.
+- The hero draws streamlines of a Burgers-type vortex (radial inflow, axial
+  outflow, swirl) as nested generations that contract by Λ = 4 − √2. Line counts
+  drop on small screens, rendering pauses offscreen, and `prefers-reduced-motion`
+  gets a single still frame.
+- Libertinus Math's ⟩ glyph is blank in the Google Fonts build, so the faint
+  equations draw it as a mirrored ⟨ (`.eq .flip`).

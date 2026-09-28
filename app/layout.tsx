@@ -1,15 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Libertinus_Math, Mona_Sans } from "next/font/google";
 import "./globals.css";
+
+const mona = Mona_Sans({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  style: ["normal", "italic"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const math = Libertinus_Math({
+  subsets: ["math", "latin", "greek"],
+  weight: "400",
+  variable: "--font-math",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Boulder Computational Solutions",
   description:
-    "Integrated computational, statistical, and mathematical solutions to the hardest data-analysis and modeling problems of our day.",
+    "We recover the equations hidden in noisy data, and the parameters that drive them.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#050608",
 };
 
 export default function RootLayout({
@@ -18,19 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${mona.variable} ${math.variable}`}>
       <body>{children}</body>
     </html>
   );
