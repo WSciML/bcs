@@ -20,14 +20,14 @@ export const subject = "Thanks for reaching out — Boulder Computational Soluti
 
 export const text = `Hi there,
 
-Thank you for getting in touch with Boulder Computational Solutions. We're really glad you reached out. Your message is with our team, and one of us will be in touch soon to hear more about what you're working on.
+Thanks for getting in touch with Boulder Computational Solutions. We've received your message, and someone from our team will follow up soon to learn more about what you're working on.
 
-In the meantime, we thought you might enjoy our SIAM News article. It's a look at one of the ideas at the heart of our work:
+In the meantime, you might enjoy our SIAM News article on one of the ideas behind our work:
 
 ${article.title}
 ${article.url}
 
-Talk soon,
+Best,
 The team at Boulder Computational Solutions
 Boulder, Colorado, USA`;
 
@@ -41,7 +41,7 @@ export const html = `<!doctype html>
 <title>${subject}</title>
 </head>
 <body style="margin:0;padding:0;background:${c.void};">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">Thanks for getting in touch. We'll be in touch soon.</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">We've received your message and will follow up soon.</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${c.void};">
   <tr>
     <td align="center" style="padding:48px 16px;">
@@ -51,15 +51,15 @@ export const html = `<!doctype html>
         </tr>
         <tr><td style="${rule}font-size:0;line-height:0;">&nbsp;</td></tr>
         <tr>
-          <td style="padding:40px 0 16px;font-size:28px;line-height:1.2;font-weight:500;letter-spacing:-0.01em;color:${c.silver};">We&rsquo;re glad you reached out.</td>
+          <td style="padding:40px 0 16px;font-size:28px;line-height:1.2;font-weight:500;letter-spacing:-0.01em;color:${c.silver};">Thanks for reaching out.</td>
         </tr>
         <tr>
           <td style="padding-bottom:32px;font-size:16px;line-height:1.6;color:${c.ash};">
             Hi there,
             <br><br>
-            Thank you for getting in touch with Boulder Computational Solutions. Your message is with our team, and one of us will be in touch soon to hear more about what you&rsquo;re working on.
+            We&rsquo;ve received your message, and someone from our team will follow up soon to learn more about what you&rsquo;re working on.
             <br><br>
-            In the meantime, we thought you might enjoy our SIAM News article. It&rsquo;s a look at one of the ideas at the heart of our work.
+            In the meantime, you might enjoy our SIAM News article on one of the ideas behind our work.
           </td>
         </tr>
         <tr>
@@ -72,7 +72,7 @@ export const html = `<!doctype html>
         </tr>
         <tr>
           <td style="padding-bottom:40px;font-size:16px;line-height:1.6;color:${c.ash};">
-            Talk soon,<br><span style="color:${c.silver};">The team at Boulder Computational Solutions</span>
+            Best,<br><span style="color:${c.silver};">The team at Boulder Computational Solutions</span>
           </td>
         </tr>
         <tr><td style="${rule}font-size:0;line-height:0;">&nbsp;</td></tr>
