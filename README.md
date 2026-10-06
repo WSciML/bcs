@@ -21,22 +21,17 @@ npm start
 
 ## Contact form
 
-The "Get in touch" dialog posts to `app/api/contact/route.ts`, which sends the
-message via [Resend](https://resend.com). Copy `.env.example` to `.env.local` and
-fill in `RESEND_API_KEY` to run it locally.
-
-**Before you have a domain:** Resend's shared `onboarding@resend.dev` sender can
-only deliver to the address your Resend account is registered under, and it
-rejects the entire send if any recipient is anyone else. So `CONTACT_TO` must be
-that single address for now — it defaults to `jack.krebsbach@colorado.edu`.
-
-Once a domain is verified in Resend, point `CONTACT_FROM` at it and widen
-`CONTACT_TO` to the full founder list.
+The "Get in touch" dialog posts to `app/api/contact/route.ts`, which sends two
+emails via [Resend](https://resend.com) from the verified `mail.bocompsol.com`
+domain: the inquiry to `CONTACT_TO` (default `jack@bocompsol.com`), and a welcome
+email back to the sender (`app/api/contact/welcome.ts`). Copy `.env.example` to
+`.env.local` and fill in `RESEND_API_KEY` to run it locally.
 
 ## Deploy (Vercel)
 
 Import the repo at [vercel.com/new](https://vercel.com/new) — the framework is
-detected automatically. Add `RESEND_API_KEY` (and `CONTACT_TO` for now) under
+detected automatically. Add `RESEND_API_KEY` (and optionally `CONTACT_TO` /
+`CONTACT_FROM`) under
 Settings → Environment Variables, for all three environments.
 
 ## Structure
@@ -45,12 +40,17 @@ Settings → Environment Variables, for all three environments.
 bcs/
 ├── app/
 │   ├── api/contact/
-│   │   └── route.ts        # contact form handler -> Resend
+│   │   ├── route.ts        # contact form handler -> Resend
+│   │   └── welcome.ts      # welcome email sent to new inquiries
 │   ├── components/
 │   │   └── Vortex.tsx      # WebGL2 hero: self-similar vortex streamlines
 │   ├── globals.css         # all page styles
-│   ├── layout.tsx          # <html>, metadata, fonts (Mona Sans, Libertinus Math)
-│   └── page.tsx            # the landing page
+│   ├── icon.svg            # favicon (+ favicon.ico, apple-icon.png rasterized from it)
+│   ├── layout.tsx          # <html>, metadata, JSON-LD, fonts (Mona Sans, Libertinus Math)
+│   ├── opengraph-image.tsx # link-preview card
+│   ├── page.tsx            # the landing page
+│   ├── robots.ts, sitemap.ts
+│   └── site.ts             # canonical URL, title, description
 ├── next.config.mjs
 ├── tsconfig.json
 └── package.json

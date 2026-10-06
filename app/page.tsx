@@ -7,12 +7,12 @@ type Cap = { title: string; blurb: string };
 
 const caps: Cap[] = [
   {
-    title: "Equation learning",
-    blurb: "Discover the equations behind a system directly from data.",
+    title: "Ultra-fast parameter estimation",
+    blurb: "Accurate inference in a fraction of the time, even when the data is noisy.",
   },
   {
-    title: "Parameter estimation",
-    blurb: "Fast, accurate inference, even when the data is noisy.",
+    title: "Equation learning",
+    blurb: "Discover the equations behind a system directly from data.",
   },
   {
     title: "Coarse graining",
@@ -175,7 +175,7 @@ export default function Home() {
             <h1>
               We change
               <br />
-              the equation.
+              <span className="shine">the equation.</span>
             </h1>
             <p className="hero-sub">
               We recover the equations hidden in noisy data, and the parameters
